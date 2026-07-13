@@ -15,7 +15,7 @@ public class ReturnExchange {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "return_exchange_id")
+    @Column(name = "return_id")
     private Integer returnExchangeId;
 
     @Column(name = "order_item_id", nullable = false)
