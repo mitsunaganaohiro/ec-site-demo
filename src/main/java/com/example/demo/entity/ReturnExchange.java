@@ -24,10 +24,10 @@ public class ReturnExchange {
     @Column(name = "type", length = 20)
     private String type;
 
-    @Column(name = "reason", length = 255)
+    @Column(name = "reason", nullable = false, length = 255)
     private String reason;
 
-    @Column(name = "status", length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
     @Column(name = "requested_at", nullable = false)

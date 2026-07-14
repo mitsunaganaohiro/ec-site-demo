@@ -24,16 +24,16 @@ public class Coupon {
     @Column(name = "discount_type", length = 20)
     private String discountType;
 
-    @Column(name = "discount_value")
+    @Column(name = "discount_value", nullable = false)
     private Integer discountValue;
 
-    @Column(name = "valid_from")
+    @Column(name = "valid_from", nullable = false)
     private LocalDate validFrom;
 
-    @Column(name = "valid_to")
+    @Column(name = "valid_to", nullable = false)
     private LocalDate validTo;
 
-    @Column(name = "status", length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
     public Coupon() {

@@ -24,7 +24,7 @@ public class CartItem {
     @Column(name = "product_id", nullable = false)
     private Integer productId;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @Column(name = "added_at", nullable = false)

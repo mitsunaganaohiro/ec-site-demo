@@ -27,7 +27,7 @@ public class Admin {
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
-    @Column(name = "role", length = 20)
+    @Column(name = "role", nullable = false, length = 20)
     private String role;
 
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)

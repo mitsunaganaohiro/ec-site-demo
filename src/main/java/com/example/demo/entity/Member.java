@@ -19,7 +19,10 @@ public class Member {
     @Column(name = "member_id")
     private Integer memberId;
 
-    @Column(name = "email", nullable = false, unique = true, length = 255)
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
+
+    @Column(name = "email", nullable = false, length = 255)
     private String email;
 
     @Column(name = "password_hash", nullable = false, length = 255)
@@ -27,6 +30,9 @@ public class Member {
 
     @Column(name = "postal_code", length = 10)
     private String postalCode;
+
+    @Column(name = "address", length = 255)
+    private String address;
 
     @Column(name = "phone", length = 20)
     private String phone;
@@ -37,10 +43,10 @@ public class Member {
     @Column(name = "gender", length = 10)
     private String gender;
 
-    @Column(name = "member_rank", length = 20)
+    @Column(name = "member_rank", nullable = false, length = 20)
     private String memberRank;
 
-    @Column(name = "status", length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
@@ -61,6 +67,14 @@ public class Member {
 
     public void setMemberId(Integer memberId) {
         this.memberId = memberId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -85,6 +99,14 @@ public class Member {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPhone() {

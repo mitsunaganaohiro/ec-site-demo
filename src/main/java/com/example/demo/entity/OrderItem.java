@@ -22,16 +22,16 @@ public class OrderItem {
     @Column(name = "product_id", nullable = false)
     private Integer productId;
 
-    @Column(name = "product_name", length = 255)
+    @Column(name = "product_name", nullable = false, length = 255)
     private String productName;
 
-    @Column(name = "unit_price")
+    @Column(name = "unit_price", nullable = false)
     private Integer unitPrice;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "subtotal")
+    @Column(name = "subtotal", nullable = false)
     private Integer subtotal;
 
     public OrderItem() {

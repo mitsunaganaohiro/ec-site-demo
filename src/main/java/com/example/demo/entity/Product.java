@@ -18,7 +18,7 @@ public class Product {
     @Column(name = "product_id")
     private Integer productId;
 
-    @Column(name = "category_id")
+    @Column(name = "category_id", nullable = false)
     private Integer categoryId;
 
     @Column(name = "name", nullable = false, length = 255)
@@ -33,7 +33,7 @@ public class Product {
     @Column(name = "image_url", length = 255)
     private String imageUrl;
 
-    @Column(name = "status", length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
     @Column(name = "created_by")

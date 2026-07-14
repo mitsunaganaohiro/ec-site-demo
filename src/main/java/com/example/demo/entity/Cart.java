@@ -18,7 +18,7 @@ public class Cart {
     @Column(name = "cart_id")
     private Integer cartId;
 
-    @Column(name = "member_id", unique = true)
+    @Column(name = "member_id", nullable = false, unique = true)
     private Integer memberId;
 
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)

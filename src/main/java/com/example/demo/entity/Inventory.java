@@ -18,10 +18,10 @@ public class Inventory {
     @Column(name = "inventory_id")
     private Integer inventoryId;
 
-    @Column(name = "product_id", unique = true)
+    @Column(name = "product_id", nullable = false, unique = true)
     private Integer productId;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @Column(name = "updated_by")

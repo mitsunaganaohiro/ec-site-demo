@@ -24,13 +24,19 @@ public class CouponUsage {
     @Column(name = "coupon_id", nullable = false)
     private Integer couponId;
 
-    @Column(name = "order_id", unique = true)
+    @Column(name = "order_id", nullable = false, unique = true)
     private Integer orderId;
+
+    @Column(name = "coupon_code", nullable = false, length = 30)
+    private String couponCode;
+
+    @Column(name = "discount_type", nullable = false, length = 10)
+    private String discountType;
 
     @Column(name = "discount_code", length = 50)
     private String discountCode;
 
-    @Column(name = "discount_amount")
+    @Column(name = "discount_amount", nullable = false)
     private Integer discountAmount;
 
     @Column(name = "used_at", nullable = false)
@@ -69,6 +75,22 @@ public class CouponUsage {
 
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
+    }
+
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
+    }
+
+    public String getDiscountType() {
+        return discountType;
+    }
+
+    public void setDiscountType(String discountType) {
+        this.discountType = discountType;
     }
 
     public String getDiscountCode() {

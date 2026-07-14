@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>サーバーエラー</title>
+</head>
+<body>
+    <h1>サーバーエラーが発生しました</h1>
+    <p th:text="${errorMessage} ?: 'サーバーエラーが発生しました。しばらくしてから再度お試しください。'"></p>
+    <a th:href="@{/}">トップページへ戻る</a>
+</body>
+</html>

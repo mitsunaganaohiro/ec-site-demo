@@ -30,7 +30,7 @@ public class PaymentMethod {
     @Column(name = "card_last4", length = 4)
     private String cardLast4;
 
-    @Column(name = "is_default")
+    @Column(name = "is_default", nullable = false)
     private Boolean isDefault;
 
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)

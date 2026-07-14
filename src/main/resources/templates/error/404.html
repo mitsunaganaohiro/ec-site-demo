@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ページが見つかりません</title>
+</head>
+<body>
+    <h1>ページが見つかりませんでした</h1>
+    <p th:text="${errorMessage} ?: 'お探しのページは存在しないか、移動した可能性があります。'"></p>
+    <a th:href="@{/}">トップページへ戻る</a>
+</body>
+</html>

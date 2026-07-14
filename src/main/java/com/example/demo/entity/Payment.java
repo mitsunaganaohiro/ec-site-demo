@@ -18,7 +18,7 @@ public class Payment {
     @Column(name = "payment_id")
     private Integer paymentId;
 
-    @Column(name = "order_id", unique = true)
+    @Column(name = "order_id", nullable = false, unique = true)
     private Integer orderId;
 
     @Column(name = "payment_method_type", length = 50)
@@ -27,10 +27,10 @@ public class Payment {
     @Column(name = "masked_card_number", length = 20)
     private String maskedCardNumber;
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     private Integer amount;
 
-    @Column(name = "status", length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
     @Column(name = "paid_at")

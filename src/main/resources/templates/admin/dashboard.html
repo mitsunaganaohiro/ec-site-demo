@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理者ダッシュボード</title>
+</head>
+<body>
+    <h1>管理者ダッシュボード</h1>
+    <p>ログインに成功しました。</p>
+    <form th:action="@{/admin/logout}" method="post">
+        <button type="submit">ログアウト</button>
+    </form>
+</body>
+</html>

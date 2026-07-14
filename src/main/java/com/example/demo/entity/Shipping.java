@@ -18,19 +18,19 @@ public class Shipping {
     @Column(name = "shipping_id")
     private Integer shippingId;
 
-    @Column(name = "order_id", unique = true)
+    @Column(name = "order_id", nullable = false, unique = true)
     private Integer orderId;
 
-    @Column(name = "recipient_name", length = 100)
+    @Column(name = "recipient_name", nullable = false, length = 100)
     private String recipientName;
 
-    @Column(name = "postal_code", length = 10)
+    @Column(name = "postal_code", nullable = false, length = 10)
     private String postalCode;
 
-    @Column(name = "address", length = 255)
+    @Column(name = "address", nullable = false, length = 255)
     private String address;
 
-    @Column(name = "phone", length = 20)
+    @Column(name = "phone", nullable = false, length = 20)
     private String phone;
 
     @Column(name = "carrier", length = 50)
@@ -39,7 +39,7 @@ public class Shipping {
     @Column(name = "tracking_number", length = 100)
     private String trackingNumber;
 
-    @Column(name = "status", length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
     @Column(name = "shipped_at")

@@ -21,28 +21,28 @@ public class Order {
     @Column(name = "member_id", nullable = false)
     private Integer memberId;
 
-    @Column(name = "order_date", nullable = false)
+    @Column(name = "order_date", nullable = false, insertable = false, updatable = false)
     private LocalDateTime orderDate;
 
-    @Column(name = "status", length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
-    @Column(name = "subtotal")
+    @Column(name = "subtotal", nullable = false)
     private Integer subtotal;
 
-    @Column(name = "shipping_fee")
+    @Column(name = "shipping_fee", nullable = false)
     private Integer shippingFee;
 
-    @Column(name = "tax")
+    @Column(name = "tax", nullable = false)
     private Integer tax;
 
-    @Column(name = "coupon_discount")
+    @Column(name = "coupon_discount", nullable = false)
     private Integer couponDiscount;
 
-    @Column(name = "points_used")
+    @Column(name = "points_used", nullable = false)
     private Integer pointsUsed;
 
-    @Column(name = "total_amount")
+    @Column(name = "total_amount", nullable = false)
     private Integer totalAmount;
 
     @Column(name = "updated_by")

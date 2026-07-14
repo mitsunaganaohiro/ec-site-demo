@@ -18,19 +18,19 @@ public class Inquiry {
     @Column(name = "inquiry_id")
     private Integer inquiryId;
 
-    @Column(name = "member_id")
+    @Column(name = "member_id", nullable = false)
     private Integer memberId;
 
     @Column(name = "admin_id")
     private Integer adminId;
 
-    @Column(name = "subject", length = 255)
+    @Column(name = "subject", nullable = false, length = 255)
     private String subject;
 
     @Column(name = "content")
     private String content;
 
-    @Column(name = "status", length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
