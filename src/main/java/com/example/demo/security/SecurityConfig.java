@@ -8,12 +8,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authorization.AuthenticatedAuthorizationManager;
+import org.springframework.security.authorization.AuthorityAuthorizationManager;
+import org.springframework.security.authorization.AuthorizationManagers;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -77,6 +82,16 @@ public class SecurityConfig {
     }
 
     /**
+     * /admin/** への未認証アクセス時に、ログイン画面へリダイレクトする代わりに
+     * /error/403 へフォワードするエントリーポイント(アクセス制御マトリクスの要件)。
+     */
+    @Bean
+    public AuthenticationEntryPoint forbiddenEntryPoint() {
+        return (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+                -> request.getRequestDispatcher("/error/403").forward(request, response);
+    }
+
+    /**
      * 会員用の認証プロバイダー。
      */
     @Bean
@@ -106,7 +121,11 @@ public class SecurityConfig {
         http
                 .securityMatcher("/admin/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/login").permitAll()
+                        // /admin/login はゲスト(未認証)・管理者のみ許可。会員ロールは403(アクセス制御マトリクス)。
+                        .requestMatchers("/admin/login").access(AuthorizationManagers.anyOf(
+                                AuthenticatedAuthorizationManager.anonymous(),
+                                AuthorityAuthorizationManager.hasRole("ADMIN")
+                        ))
                         .anyRequest().hasRole("ADMIN")
                 )
                 .formLogin(form -> form
@@ -115,7 +134,6 @@ public class SecurityConfig {
                         .usernameParameter("email")
                         .defaultSuccessUrl("/admin/dashboard", true)
                         .failureUrl("/admin/login?error")
-                        .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/admin/logout")
@@ -126,7 +144,10 @@ public class SecurityConfig {
                         .maximumSessions(1)
                         .sessionRegistry(sessionRegistry())
                 )
-                .exceptionHandling(handling -> handling.accessDeniedHandler(accessDeniedHandler()))
+                .exceptionHandling(handling -> handling
+                        .authenticationEntryPoint(forbiddenEntryPoint())
+                        .accessDeniedHandler(accessDeniedHandler())
+                )
                 .authenticationProvider(adminAuthenticationProvider());
 
         return http.build();
