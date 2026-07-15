@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.common.exception.DuplicateEmailException;
 import com.example.demo.dto.MemberRegisterForm;
 import com.example.demo.service.MemberService;
 import jakarta.servlet.ServletException;
@@ -16,26 +17,33 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class RegisterController {
+public class MemberController {
 
     private final MemberService memberService;
 
-    public RegisterController(MemberService memberService) {
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
+    /**
+     * API-001: 会員登録フォーム表示。ログイン済みの場合はトップへリダイレクトする。
+     */
     @GetMapping("/register")
-    public String showForm(Model model, Authentication authentication) {
+    public String showRegisterForm(Model model, Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()
                 && !(authentication instanceof AnonymousAuthenticationToken)) {
             return "redirect:/";
         }
+
         if (!model.containsAttribute("memberRegisterForm")) {
             model.addAttribute("memberRegisterForm", new MemberRegisterForm());
         }
-        return "auth/register";
+        return "user/register";
     }
 
+    /**
+     * API-002: 会員登録実行。
+     */
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute MemberRegisterForm memberRegisterForm,
                             BindingResult bindingResult,
@@ -47,15 +55,16 @@ public class RegisterController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "auth/register";
+            return "user/register";
         }
 
-        memberService.register(memberRegisterForm, request, response);
-        return "redirect:/";
-    }
+        try {
+            memberService.register(memberRegisterForm, request, response);
+        } catch (DuplicateEmailException e) {
+            bindingResult.rejectValue("email", "duplicate", e.getMessage());
+            return "user/register";
+        }
 
-    @GetMapping("/register/complete")
-    public String complete() {
-        return "auth/register_complete";
+        return "redirect:/";
     }
 }
