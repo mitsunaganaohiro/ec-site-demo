@@ -2,6 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.MemberRegisterForm;
 import com.example.demo.service.MemberService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,7 +38,9 @@ public class RegisterController {
 
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute MemberRegisterForm memberRegisterForm,
-                            BindingResult bindingResult) {
+                            BindingResult bindingResult,
+                            HttpServletRequest request,
+                            HttpServletResponse response) throws ServletException {
         if (memberRegisterForm.getPassword() != null
                 && !memberRegisterForm.getPassword().equals(memberRegisterForm.getPasswordConfirm())) {
             bindingResult.rejectValue("passwordConfirm", "mismatch", "パスワードが一致しません");
@@ -45,8 +50,8 @@ public class RegisterController {
             return "auth/register";
         }
 
-        memberService.register(memberRegisterForm);
-        return "redirect:/register/complete";
+        memberService.register(memberRegisterForm, request, response);
+        return "redirect:/";
     }
 
     @GetMapping("/register/complete")

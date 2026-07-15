@@ -21,7 +21,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+
+import java.util.List;
 
 /**
  * 会員(ROLE_MEMBER)と管理者(ROLE_ADMIN)を別々のSecurityFilterChainで扱うセキュリティ設定。
@@ -89,6 +96,32 @@ public class SecurityConfig {
     public AuthenticationEntryPoint forbiddenEntryPoint() {
         return (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
                 -> request.getRequestDispatcher("/error/403").forward(request, response);
+    }
+
+    /**
+     * 会員用のセッション認証ストラテジー。maximumSessions(1)相当の多重ログイン制御・
+     * セッション固定攻撃対策・SessionRegistryへの登録を行う。
+     *
+     * <p>HttpServletRequest.login()によるプログラム的ログイン(会員登録直後の自動ログイン等)は
+     * SecurityFilterChainのformLoginを経由しないため、このストラテジーが自動適用されない。
+     * その場合は呼び出し元で明示的に onAuthentication() を呼び出す必要がある。</p>
+     */
+    @Bean
+    public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        ConcurrentSessionControlAuthenticationStrategy concurrentSessionControlStrategy =
+                new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry());
+        concurrentSessionControlStrategy.setMaximumSessions(1);
+
+        SessionFixationProtectionStrategy sessionFixationProtectionStrategy = new SessionFixationProtectionStrategy();
+
+        RegisterSessionAuthenticationStrategy registerSessionAuthenticationStrategy =
+                new RegisterSessionAuthenticationStrategy(sessionRegistry());
+
+        return new CompositeSessionAuthenticationStrategy(List.of(
+                concurrentSessionControlStrategy,
+                sessionFixationProtectionStrategy,
+                registerSessionAuthenticationStrategy
+        ));
     }
 
     /**

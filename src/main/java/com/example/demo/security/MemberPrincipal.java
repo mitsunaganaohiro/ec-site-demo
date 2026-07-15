@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 認証済み会員のUserDetails。AuthenticationSuccessHandlerなどでmemberIdを
@@ -61,5 +62,26 @@ public class MemberPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    /**
+     * SessionRegistryは「同一会員の別セッション」をprincipalのequals/hashCodeで判定するため、
+     * ログインの度に新しいインスタンスが生成されるこのクラスでは、必ずmemberIdベースで
+     * オーバーライドする必要がある(未オーバーライドだとmaximumSessions(1)が機能しない)。
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MemberPrincipal other)) {
+            return false;
+        }
+        return Objects.equals(memberId, other.memberId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(memberId);
     }
 }
