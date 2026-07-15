@@ -14,6 +14,6 @@ public class LoginController {
                 && !(authentication instanceof AnonymousAuthenticationToken)) {
             return "redirect:/";
         }
-        return "auth/login";
+        return "user/login";
     }
 }
