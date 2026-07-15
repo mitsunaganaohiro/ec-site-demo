@@ -18,7 +18,7 @@ public class MemberUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Member member = memberRepository.findByEmailAndDeletedAtIsNull(email)
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("会員が見つかりません: " + email));
 
         return new MemberPrincipal(member);

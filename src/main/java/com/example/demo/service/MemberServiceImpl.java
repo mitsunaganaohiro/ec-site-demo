@@ -22,7 +22,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public Member register(MemberRegisterForm form) {
-        if (memberRepository.findByEmailAndDeletedAtIsNull(form.getEmail()).isPresent()) {
+        if (memberRepository.findByEmail(form.getEmail()).isPresent()) {
             throw new DuplicateEmailException("既に登録されているメールアドレスです: " + form.getEmail());
         }
 
@@ -33,6 +33,7 @@ public class MemberServiceImpl implements MemberService {
         member.setMemberRank("normal");
         member.setStatus("active");
 
-        return memberRepository.save(member);
+        memberRepository.insert(member);
+        return member;
     }
 }
