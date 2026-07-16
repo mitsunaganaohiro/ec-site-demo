@@ -4,49 +4,57 @@
 
     <select id="findAll" resultType="com.example.demo.entity.Product">
         SELECT
-            product_id,
-            category_id,
-            name,
-            description,
-            price,
-            image_url,
-            brand,
-            status,
-            created_by,
-            updated_by,
-            created_at,
-            updated_at,
-            deleted_at
-        FROM products
+            p.product_id,
+            p.category_id,
+            p.name,
+            p.description,
+            p.price,
+            p.image_url,
+            p.brand,
+            p.status,
+            p.created_by,
+            p.updated_by,
+            p.created_at,
+            p.updated_at,
+            p.deleted_at,
+            c.name AS category_name,
+            COALESCE(i.quantity, 0) AS stock_quantity
+        FROM products p
+        LEFT JOIN categories c ON c.category_id = p.category_id
+        LEFT JOIN inventories i ON i.product_id = p.product_id
         <where>
-            deleted_at IS NULL
+            p.deleted_at IS NULL
             <if test="categoryId != null">
-                AND category_id = #{categoryId}
+                AND p.category_id = #{categoryId}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND name LIKE CONCAT('%', #{keyword}, '%')
+                AND p.name LIKE CONCAT('%', #{keyword}, '%')
             </if>
         </where>
-        ORDER BY product_id DESC
+        ORDER BY p.product_id DESC
     </select>
 
     <select id="findById" resultType="com.example.demo.entity.Product">
         SELECT
-            product_id,
-            category_id,
-            name,
-            description,
-            price,
-            image_url,
-            brand,
-            status,
-            created_by,
-            updated_by,
-            created_at,
-            updated_at,
-            deleted_at
-        FROM products
-        WHERE product_id = #{productId}
+            p.product_id,
+            p.category_id,
+            p.name,
+            p.description,
+            p.price,
+            p.image_url,
+            p.brand,
+            p.status,
+            p.created_by,
+            p.updated_by,
+            p.created_at,
+            p.updated_at,
+            p.deleted_at,
+            c.name AS category_name,
+            COALESCE(i.quantity, 0) AS stock_quantity
+        FROM products p
+        LEFT JOIN categories c ON c.category_id = p.category_id
+        LEFT JOIN inventories i ON i.product_id = p.product_id
+        WHERE p.product_id = #{productId}
     </select>
 
 </mapper>

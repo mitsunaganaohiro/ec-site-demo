@@ -16,17 +16,23 @@ import java.util.Objects;
 public class MemberPrincipal implements UserDetails {
 
     private final Integer memberId;
+    private final String name;
     private final String email;
     private final String passwordHash;
 
     public MemberPrincipal(Member member) {
         this.memberId = member.getMemberId();
+        this.name = member.getName();
         this.email = member.getEmail();
         this.passwordHash = member.getPasswordHash();
     }
 
     public Integer getMemberId() {
         return memberId;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

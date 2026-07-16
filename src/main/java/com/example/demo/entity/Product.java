@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import java.time.LocalDateTime;
 
@@ -53,6 +54,19 @@ public class Product {
 
     @Column(name = "brand", length = 100)
     private String brand;
+
+    /**
+     * カテゴリ名。productsテーブルの実カラムではなく、ProductMapper.xmlのJOINで
+     * 取得した値をMyBatisが設定する(JPAには@Transientで永続化対象外にする)。
+     */
+    @Transient
+    private String categoryName;
+
+    /**
+     * 在庫数。inventoriesテーブルの値をProductMapper.xmlのJOINで取得する(同上)。
+     */
+    @Transient
+    private Integer stockQuantity;
 
     public Product() {
     }
@@ -159,5 +173,21 @@ public class Product {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Integer getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 }
