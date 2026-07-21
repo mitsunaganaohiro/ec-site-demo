@@ -12,16 +12,15 @@
             p.image_url,
             p.brand,
             p.status,
+            p.stock_quantity,
             p.created_by,
             p.updated_by,
             p.created_at,
             p.updated_at,
             p.deleted_at,
-            c.name AS category_name,
-            COALESCE(i.quantity, 0) AS stock_quantity
+            c.name AS category_name
         FROM products p
         LEFT JOIN categories c ON c.category_id = p.category_id
-        LEFT JOIN inventories i ON i.product_id = p.product_id
         <where>
             p.deleted_at IS NULL
             <if test="categoryId != null">
@@ -44,24 +43,23 @@
             p.image_url,
             p.brand,
             p.status,
+            p.stock_quantity,
             p.created_by,
             p.updated_by,
             p.created_at,
             p.updated_at,
             p.deleted_at,
-            c.name AS category_name,
-            COALESCE(i.quantity, 0) AS stock_quantity
+            c.name AS category_name
         FROM products p
         LEFT JOIN categories c ON c.category_id = p.category_id
-        LEFT JOIN inventories i ON i.product_id = p.product_id
         WHERE p.product_id = #{productId}
     </select>
 
     <update id="decrementStock">
-        UPDATE inventories
-        SET quantity = quantity - #{quantity}
+        UPDATE products
+        SET stock_quantity = stock_quantity - #{quantity}
         WHERE product_id = #{productId}
-          AND quantity >= #{quantity}
+          AND stock_quantity >= #{quantity}
     </update>
 
 </mapper>

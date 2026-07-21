@@ -62,10 +62,7 @@ public class Product {
     @Transient
     private String categoryName;
 
-    /**
-     * 在庫数。inventoriesテーブルの値をProductMapper.xmlのJOINで取得する(同上)。
-     */
-    @Transient
+    @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity;
 
     public Product() {

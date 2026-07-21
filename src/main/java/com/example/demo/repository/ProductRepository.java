@@ -23,7 +23,7 @@ public interface ProductRepository {
     Optional<Product> findById(@Param("productId") int productId);
 
     /**
-     * 在庫を減算する(inventoriesテーブル)。quantity以上の在庫がある場合のみ減算し、
+     * 在庫を減算する(products.stock_quantity)。quantity以上の在庫がある場合のみ減算し、
      * 更新件数を返す。0の場合は在庫不足または競合が発生したと判定する(RSK-01対策)。
      */
     int decrementStock(@Param("productId") int productId, @Param("quantity") int quantity);
