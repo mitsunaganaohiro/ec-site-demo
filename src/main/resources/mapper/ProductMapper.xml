@@ -57,4 +57,11 @@
         WHERE p.product_id = #{productId}
     </select>
 
+    <update id="decrementStock">
+        UPDATE inventories
+        SET quantity = quantity - #{quantity}
+        WHERE product_id = #{productId}
+          AND quantity >= #{quantity}
+    </update>
+
 </mapper>

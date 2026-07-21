@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>カート</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <main class="container py-5">
+        <h1 class="mb-4">カート</h1>
+
+        <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+        <div class="alert alert-warning" th:if="${hasDeletedItem}">
+            カート内の一部商品は販売終了のため除外されました
+        </div>
+
+        <div th:if="${#lists.isEmpty(cartItems)}">
+            <p class="text-muted">カートに商品がありません</p>
+            <p><a th:href="@{/products}" class="btn btn-primary">商品一覧へ戻る</a></p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(cartItems)}">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>商品名</th>
+                        <th>単価</th>
+                        <th>数量</th>
+                        <th>小計</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${cartItems}">
+                        <td th:text="${item.productName}"></td>
+                        <td th:text="'¥' + ${#numbers.formatInteger(item.price, 1, 'COMMA')}"></td>
+                        <td>
+                            <form th:action="@{/cart/items/{id}(id=${item.cartItemId})}" method="post"
+                                  class="d-flex align-items-center gap-2">
+                                <input type="number" name="quantity" min="1" th:value="${item.quantity}"
+                                       class="form-control form-control-sm" style="width: 80px;">
+                                <button type="submit" class="btn btn-outline-primary btn-sm">変更</button>
+                            </form>
+                        </td>
+                        <td th:text="'¥' + ${#numbers.formatInteger(item.subTotal, 1, 'COMMA')}"></td>
+                        <td>
+                            <form th:action="@{/cart/items/{id}/delete(id=${item.cartItemId})}" method="post">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">削除</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="fs-4 fw-bold text-end">
+                合計金額: <span th:text="'¥' + ${#numbers.formatInteger(totalAmount, 1, 'COMMA')}"></span>
+            </p>
+
+            <div class="d-flex justify-content-end gap-2">
+                <a th:href="@{/products}" class="btn btn-outline-secondary">商品一覧へ戻る</a>
+                <a th:href="@{/orders/confirm}" class="btn btn-primary">注文手続きへ進む</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.repository.OrderItemRepository">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="orderItemId">
+        INSERT INTO order_items (
+            order_id,
+            product_id,
+            product_name,
+            unit_price,
+            quantity,
+            subtotal
+        ) VALUES (
+            #{orderId},
+            #{productId},
+            #{productName},
+            #{unitPrice},
+            #{quantity},
+            #{subtotal}
+        )
+    </insert>
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.repository.OrderRepository">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT INTO orders (
+            member_id,
+            status,
+            subtotal,
+            shipping_fee,
+            tax,
+            coupon_discount,
+            points_used,
+            total_amount,
+            updated_by
+        ) VALUES (
+            #{memberId},
+            #{status},
+            #{subtotal},
+            #{shippingFee},
+            #{tax},
+            #{couponDiscount},
+            #{pointsUsed},
+            #{totalAmount},
+            #{updatedBy}
+        )
+    </insert>
+
+    <select id="findByOrderIdAndMemberId" resultType="com.example.demo.entity.Order">
+        SELECT
+            order_id,
+            member_id,
+            order_date,
+            status,
+            subtotal,
+            shipping_fee,
+            tax,
+            coupon_discount,
+            points_used,
+            total_amount,
+            updated_by,
+            created_at
+        FROM orders
+        WHERE order_id = #{orderId}
+          AND member_id = #{memberId}
+    </select>
+
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.repository.CartItemRepository">
+
+    <select id="findByMemberIdWithProduct" resultType="com.example.demo.dto.CartItemDto">
+        SELECT
+            ci.cart_item_id,
+            ci.product_id,
+            p.name AS product_name,
+            p.price,
+            ci.quantity,
+            (p.price * ci.quantity) AS sub_total
+        FROM cart_items ci
+        JOIN carts c ON c.cart_id = ci.cart_id
+        JOIN products p ON p.product_id = ci.product_id
+        WHERE c.member_id = #{memberId}
+          AND p.deleted_at IS NULL
+        ORDER BY ci.cart_item_id
+    </select>
+
+    <select id="findAllByMemberIdWithProduct" resultType="com.example.demo.dto.CartItemDto">
+        SELECT
+            ci.cart_item_id,
+            ci.product_id,
+            p.name AS product_name,
+            p.price,
+            ci.quantity,
+            (p.price * ci.quantity) AS sub_total
+        FROM cart_items ci
+        JOIN carts c ON c.cart_id = ci.cart_id
+        JOIN products p ON p.product_id = ci.product_id
+        WHERE c.member_id = #{memberId}
+        ORDER BY ci.cart_item_id
+    </select>
+
+    <select id="findByMemberIdAndProductId" resultType="com.example.demo.entity.CartItem">
+        SELECT
+            ci.cart_item_id,
+            ci.cart_id,
+            ci.product_id,
+            ci.quantity,
+            ci.added_at
+        FROM cart_items ci
+        JOIN carts c ON c.cart_id = ci.cart_id
+        WHERE c.member_id = #{memberId}
+          AND ci.product_id = #{productId}
+    </select>
+
+    <select id="findByCartItemId" resultType="com.example.demo.entity.CartItem">
+        SELECT
+            cart_item_id,
+            cart_id,
+            product_id,
+            quantity,
+            added_at
+        FROM cart_items
+        WHERE cart_item_id = #{cartItemId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="cartItemId">
+        INSERT INTO cart_items (
+            cart_id,
+            product_id,
+            quantity,
+            added_at
+        ) VALUES (
+            #{cartId},
+            #{productId},
+            #{quantity},
+            #{addedAt}
+        )
+    </insert>
+
+    <update id="updateQuantity">
+        UPDATE cart_items
+        SET quantity = #{quantity}
+        WHERE cart_item_id = #{cartItemId}
+    </update>
+
+    <delete id="deleteByCartItemId">
+        DELETE FROM cart_items
+        WHERE cart_item_id = #{cartItemId}
+    </delete>
+
+    <delete id="deleteByMemberId">
+        DELETE ci FROM cart_items ci
+        JOIN carts c ON c.cart_id = ci.cart_id
+        WHERE c.member_id = #{memberId}
+    </delete>
+
+</mapper>

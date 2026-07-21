@@ -21,4 +21,10 @@ public interface ProductRepository {
      * ソフトデリート状態を問わずproduct_idで商品を検索する。削除済み判定はService側で行う。
      */
     Optional<Product> findById(@Param("productId") int productId);
+
+    /**
+     * 在庫を減算する(inventoriesテーブル)。quantity以上の在庫がある場合のみ減算し、
+     * 更新件数を返す。0の場合は在庫不足または競合が発生したと判定する(RSK-01対策)。
+     */
+    int decrementStock(@Param("productId") int productId, @Param("quantity") int quantity);
 }
