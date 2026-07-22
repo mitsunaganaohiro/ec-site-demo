@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.common.OrderStatus;
 import com.example.demo.common.exception.InsufficientStockException;
+import com.example.demo.common.exception.InvalidOrderStatusException;
 import com.example.demo.common.exception.ResourceNotFoundException;
 import com.example.demo.dto.CartItemDto;
 import com.example.demo.entity.Order;
@@ -104,5 +105,33 @@ public class OrderService {
     public Order findByOrderIdAndMemberId(int orderId, int memberId) {
         return orderRepository.findByOrderIdAndMemberId(orderId, memberId)
                 .orElseThrow(() -> new ResourceNotFoundException("注文が見つかりません: " + orderId));
+    }
+
+    /**
+     * 注文をキャンセルする。キャンセル済み・発送準備以降など、注文受付以外の
+     * ステータスからはキャンセルできない。キャンセル時は各明細の数量分だけ在庫を戻す。
+     */
+    @Transactional
+    public void cancel(int memberId, int orderId) {
+        // STEP 1: 自分の注文のみを取得
+        Order order = orderRepository.findByOrderIdAndMemberId(orderId, memberId)
+                .orElseThrow(() -> new ResourceNotFoundException("注文が見つかりません: " + orderId));
+
+        // STEP 2: キャンセル可否を確認
+        OrderStatus currentStatus = OrderStatus.fromValue(Integer.parseInt(order.getStatus()));
+        if (!currentStatus.isCancellable()) {
+            throw new InvalidOrderStatusException("この注文はキャンセルできません");
+        }
+
+        // STEP 3: ステータスをキャンセルに更新
+        orderRepository.updateStatus(orderId, OrderStatus.CANCELLED.getValue());
+
+        // STEP 4: 注文明細を取得
+        List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);
+
+        // STEP 5: 各明細の数量分だけ在庫を加算
+        for (OrderItem orderItem : orderItems) {
+            productRepository.incrementStock(orderItem.getProductId(), orderItem.getQuantity());
+        }
     }
 }
