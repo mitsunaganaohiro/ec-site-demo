@@ -100,6 +100,13 @@ public class OrderService {
     }
 
     /**
+     * 会員の注文履歴を新しい順に取得する。
+     */
+    public List<Order> findByMemberId(int memberId) {
+        return orderRepository.findByMemberId(memberId);
+    }
+
+    /**
      * 自分の注文のみを取得する。存在しない・他会員の注文の場合はResourceNotFoundException。
      */
     public Order findByOrderIdAndMemberId(int orderId, int memberId) {
