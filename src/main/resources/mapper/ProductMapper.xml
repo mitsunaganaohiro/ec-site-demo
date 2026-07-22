@@ -62,4 +62,11 @@
           AND stock_quantity >= #{quantity}
     </update>
 
+    <update id="incrementStock">
+        UPDATE products
+        SET stock_quantity = stock_quantity + #{quantity},
+            updated_at = NOW()
+        WHERE product_id = #{productId}
+    </update>
+
 </mapper>

@@ -20,4 +20,17 @@
         )
     </insert>
 
+    <select id="findByOrderId" resultType="com.example.demo.entity.OrderItem">
+        SELECT
+            order_item_id,
+            order_id,
+            product_id,
+            product_name,
+            unit_price,
+            quantity,
+            subtotal
+        FROM order_items
+        WHERE order_id = #{orderId}
+    </select>
+
 </mapper>

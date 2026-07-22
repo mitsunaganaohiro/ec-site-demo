@@ -27,4 +27,9 @@ public interface ProductRepository {
      * 更新件数を返す。0の場合は在庫不足または競合が発生したと判定する(RSK-01対策)。
      */
     int decrementStock(@Param("productId") int productId, @Param("quantity") int quantity);
+
+    /**
+     * 在庫を加算する(products.stock_quantity)。注文キャンセル・返品時の在庫戻しに使用する。
+     */
+    void incrementStock(@Param("productId") int productId, @Param("quantity") int quantity);
 }

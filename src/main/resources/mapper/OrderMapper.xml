@@ -45,4 +45,29 @@
           AND member_id = #{memberId}
     </select>
 
+    <select id="findByMemberId" resultType="com.example.demo.entity.Order">
+        SELECT
+            order_id,
+            member_id,
+            order_date,
+            status,
+            subtotal,
+            shipping_fee,
+            tax,
+            coupon_discount,
+            points_used,
+            total_amount,
+            updated_by,
+            created_at
+        FROM orders
+        WHERE member_id = #{memberId}
+        ORDER BY created_at DESC
+    </select>
+
+    <update id="updateStatus">
+        UPDATE orders
+        SET status = #{status}
+        WHERE order_id = #{orderId}
+    </update>
+
 </mapper>
