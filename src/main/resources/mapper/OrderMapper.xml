@@ -70,4 +70,44 @@
         WHERE order_id = #{orderId}
     </update>
 
+    <select id="findAll" resultType="com.example.demo.entity.Order">
+        SELECT
+            o.order_id,
+            o.member_id,
+            o.order_date,
+            o.status,
+            o.subtotal,
+            o.shipping_fee,
+            o.tax,
+            o.coupon_discount,
+            o.points_used,
+            o.total_amount,
+            o.updated_by,
+            o.created_at,
+            m.name AS member_name
+        FROM orders o
+        JOIN members m ON o.member_id = m.member_id
+        ORDER BY o.created_at DESC
+    </select>
+
+    <select id="findByOrderId" resultType="com.example.demo.entity.Order">
+        SELECT
+            o.order_id,
+            o.member_id,
+            o.order_date,
+            o.status,
+            o.subtotal,
+            o.shipping_fee,
+            o.tax,
+            o.coupon_discount,
+            o.points_used,
+            o.total_amount,
+            o.updated_by,
+            o.created_at,
+            m.name AS member_name
+        FROM orders o
+        JOIN members m ON o.member_id = m.member_id
+        WHERE o.order_id = #{orderId}
+    </select>
+
 </mapper>

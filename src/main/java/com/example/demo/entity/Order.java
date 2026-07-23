@@ -6,8 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -50,6 +52,18 @@ public class Order {
 
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    /**
+     * 取得した値をMyBatisが設定する(JPAには@Transientで永続化対象外にする)。
+     */
+    @Transient
+    private String memberName;
+
+    /**
+     * 管理者向け注文詳細取得時にServiceが設定する(JPAには@Transientで永続化対象外にする)。
+     */
+    @Transient
+    private List<OrderItem> orderItems;
 
     public Order() {
     }
@@ -148,5 +162,21 @@ public class Order {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 }
