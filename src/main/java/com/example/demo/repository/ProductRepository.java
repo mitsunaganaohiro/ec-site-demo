@@ -47,4 +47,9 @@ public interface ProductRepository {
      * 商品をソフトデリートする(deleted_atを設定)。
      */
     void softDelete(@Param("productId") int productId);
+
+    /**
+     * 商品を新規登録する。生成されたproduct_idはproduct.productIdに設定される。
+     */
+    void insert(Product product);
 }

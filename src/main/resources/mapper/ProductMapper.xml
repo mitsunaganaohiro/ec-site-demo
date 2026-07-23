@@ -108,4 +108,18 @@
         WHERE product_id = #{productId}
     </update>
 
+    <insert id="insert" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO products (
+            category_id,
+            name,
+            price,
+            stock_quantity
+        ) VALUES (
+            #{categoryId},
+            #{name},
+            #{price},
+            #{stockQuantity}
+        )
+    </insert>
+
 </mapper>

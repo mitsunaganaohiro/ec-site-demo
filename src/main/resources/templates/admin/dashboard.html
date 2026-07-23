@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>管理者ダッシュボード</h1>
-    <p>ログインに成功しました。</p>
+    <p th:text="${adminName} + ' さん、ログインに成功しました。'"></p>
     <form th:action="@{/admin/logout}" method="post">
         <button type="submit">ログアウト</button>
     </form>
