@@ -32,4 +32,19 @@ public interface ProductRepository {
      * 在庫を加算する(products.stock_quantity)。注文キャンセル・返品時の在庫戻しに使用する。
      */
     void incrementStock(@Param("productId") int productId, @Param("quantity") int quantity);
+
+    /**
+     * ソフトデリート済みも含めた全商品を新着順(product_id降順)で取得する(管理者用)。
+     */
+    List<Product> findAllIncludingDeleted();
+
+    /**
+     * 商品を更新する(name・price・categoryId・stockQuantity)。
+     */
+    void update(Product product);
+
+    /**
+     * 商品をソフトデリートする(deleted_atを設定)。
+     */
+    void softDelete(@Param("productId") int productId);
 }

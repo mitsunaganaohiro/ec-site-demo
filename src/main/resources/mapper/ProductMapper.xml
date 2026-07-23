@@ -69,4 +69,43 @@
         WHERE product_id = #{productId}
     </update>
 
+    <select id="findAllIncludingDeleted" resultType="com.example.demo.entity.Product">
+        SELECT
+            p.product_id,
+            p.category_id,
+            p.name,
+            p.description,
+            p.price,
+            p.image_url,
+            p.brand,
+            p.status,
+            p.stock_quantity,
+            p.created_by,
+            p.updated_by,
+            p.created_at,
+            p.updated_at,
+            p.deleted_at,
+            c.name AS category_name
+        FROM products p
+        LEFT JOIN categories c ON c.category_id = p.category_id
+        ORDER BY p.product_id DESC
+    </select>
+
+    <update id="update">
+        UPDATE products
+        SET name = #{name},
+            price = #{price},
+            category_id = #{categoryId},
+            stock_quantity = #{stockQuantity},
+            updated_at = NOW()
+        WHERE product_id = #{productId}
+    </update>
+
+    <update id="softDelete">
+        UPDATE products
+        SET deleted_at = NOW(),
+            updated_at = NOW()
+        WHERE product_id = #{productId}
+    </update>
+
 </mapper>
